@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <meta name="google-signin-client_id" content="462690385850-kpfvovc8bn73ljtu0qe2lmhpbdknscpj.apps.googleusercontent.com">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="kidvibe">
+
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="manifest" href="manifest.json">
+
+  <title>kidvibe</title>
+
+</head>
+
+<body>
+
+  <!-- Firebase Web -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyCPNGq_n7LS8f82ymhXbt0GiEI5HEcqn4U",
+      authDomain: "wanees-52426.firebaseapp.com",
+      projectId: "wanees-52426",
+      storageBucket: "wanees-52426.firebasestorage.app",
+      messagingSenderId: "159001548872",
+      appId: "1:159001548872:web:b6cf6adb6983c44995e07d"
+    });
+  </script>
+
+
+  <!-- Firebase Messaging Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register(
+          '/firebase-messaging-sw.js'
+        );
+      });
+    }
+  </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then(function(registration) {
+        console.log('FCM SW registered:', registration.scope);
+      })
+      .catch(function(error) {
+        console.log('FCM SW error:', error);
+      });
+  });
+}
+</script>
+  <!-- Flutter -->
+  <script src="flutter_bootstrap.js" async></script>
+
+
+</body>
+</html>
