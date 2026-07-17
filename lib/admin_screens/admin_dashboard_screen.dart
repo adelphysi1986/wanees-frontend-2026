@@ -310,11 +310,15 @@ class _ReportsSection extends StatefulWidget {
 
 class _ReportsSectionState extends State<_ReportsSection> {
   String type = "trainer";
+  // 'entity' = تقرير الشخص نفسه (الموجود سابقاً)، 'byCode' = جلسات بالكود
+  String reportMode = "entity";
   DateTime? fromDate;
   DateTime? toDate;
   List<dynamic> people = [];
+  dynamic selectedPerson;
 
   Map<String, dynamic>? report;
+  bool isLoadingReport = false;
 
   Future<void> loadPeople() async {
     final url = type == "trainer" ? "/api/admin/trainers" : "/api/admin/users";
@@ -349,10 +353,26 @@ class _ReportsSectionState extends State<_ReportsSection> {
           toDate = picked;
         }
       });
+
+      if (selectedPerson != null) {
+        _refreshReport();
+      }
+    }
+  }
+
+  void _refreshReport() {
+    if (selectedPerson == null) return;
+
+    if (reportMode == "entity") {
+      getReport(selectedPerson["_id"]);
+    } else {
+      getReportByCode(selectedPerson["_id"]);
     }
   }
 
   Future<void> getReport(String id) async {
+    setState(() => isLoadingReport = true);
+
     String url = "${widget.baseUrl}/api/admin/report?type=$type&id=$id";
 
     if (fromDate != null) {
@@ -363,15 +383,50 @@ class _ReportsSectionState extends State<_ReportsSection> {
       url += "&to=${DateFormat('yyyy-MM-dd').format(toDate!)}";
     }
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {"Authorization": "Bearer ${widget.token}"},
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"Authorization": "Bearer ${widget.token}"},
+      );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        report = jsonDecode(response.body);
-      });
+      if (response.statusCode == 200) {
+        setState(() {
+          report = jsonDecode(response.body);
+        });
+      }
+    } finally {
+      if (mounted) setState(() => isLoadingReport = false);
+    }
+  }
+
+  // ── تقرير "جلسات بالكود" — بس للمدربين ──
+  Future<void> getReportByCode(String trainerId) async {
+    setState(() => isLoadingReport = true);
+
+    String url =
+        "${widget.baseUrl}/api/admin/report-by-code?trainerId=$trainerId";
+
+    if (fromDate != null) {
+      url += "&from=${DateFormat('yyyy-MM-dd').format(fromDate!)}";
+    }
+
+    if (toDate != null) {
+      url += "&to=${DateFormat('yyyy-MM-dd').format(toDate!)}";
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"Authorization": "Bearer ${widget.token}"},
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          report = jsonDecode(response.body);
+        });
+      }
+    } finally {
+      if (mounted) setState(() => isLoadingReport = false);
     }
   }
 
@@ -393,6 +448,7 @@ class _ReportsSectionState extends State<_ReportsSection> {
             "التقارير المالية",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 16),
           Row(
             children: [
               ElevatedButton.icon(
@@ -429,7 +485,9 @@ class _ReportsSectionState extends State<_ReportsSection> {
                 onSelected: (v) {
                   setState(() {
                     type = "trainer";
+                    reportMode = "entity";
                     report = null;
+                    selectedPerson = null;
                   });
 
                   loadPeople();
@@ -442,7 +500,9 @@ class _ReportsSectionState extends State<_ReportsSection> {
                 onSelected: (v) {
                   setState(() {
                     type = "user";
+                    reportMode = "entity";
                     report = null;
+                    selectedPerson = null;
                   });
 
                   loadPeople();
@@ -453,6 +513,7 @@ class _ReportsSectionState extends State<_ReportsSection> {
           const SizedBox(height: 20),
           DropdownButton<dynamic>(
             hint: const Text("اختر الشخص"),
+            value: selectedPerson,
             items: people.map((p) {
               return DropdownMenuItem(
                 value: p,
@@ -460,11 +521,40 @@ class _ReportsSectionState extends State<_ReportsSection> {
               );
             }).toList(),
             onChanged: (value) {
-              getReport(value["_id"]);
+              setState(() => selectedPerson = value);
+              _refreshReport();
             },
           ),
+
+          // ── خيار "جلسات بالكود" — يظهر بس لما يكون النوع "مدرب" وفي شخص مختار ──
+          if (type == "trainer" && selectedPerson != null) ...[
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                ChoiceChip(
+                  label: const Text("جلسات المدرب"),
+                  selected: reportMode == "entity",
+                  onSelected: (v) {
+                    setState(() => reportMode = "entity");
+                    _refreshReport();
+                  },
+                ),
+                const SizedBox(width: 15),
+                ChoiceChip(
+                  label: const Text("جلسات بالكود"),
+                  selected: reportMode == "byCode",
+                  onSelected: (v) {
+                    setState(() => reportMode = "byCode");
+                    _refreshReport();
+                  },
+                ),
+              ],
+            ),
+          ],
+
           const SizedBox(height: 30),
-          if (report != null)
+          if (isLoadingReport) const CircularProgressIndicator(),
+          if (report != null && !isLoadingReport)
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,8 +562,12 @@ class _ReportsSectionState extends State<_ReportsSection> {
                   Row(
                     children: [
                       _card("عدد الجلسات", report!["totalCount"].toString()),
-                      _card("المدفوع", report!["paidCount"].toString()),
+                      if (reportMode == "entity")
+                        _card("المدفوع", report!["paidCount"].toString()),
                       _card("الإيرادات", "${report!["totalAmount"]} ₪"),
+                      if (reportMode == "byCode")
+                        _card("نسبة المنصة (20%)",
+                            "${(report!["platformShare"] as num).toStringAsFixed(2)} ₪"),
                     ],
                   ),
                   const SizedBox(height: 25),
@@ -482,20 +576,24 @@ class _ReportsSectionState extends State<_ReportsSection> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: report!["activities"].length,
-                      itemBuilder: (context, index) {
-                        final a = report!["activities"][index];
+                    child: report!["activities"].isEmpty
+                        ? const Center(
+                            child: Text("ما في جلسات مطابقة"),
+                          )
+                        : ListView.builder(
+                            itemCount: report!["activities"].length,
+                            itemBuilder: (context, index) {
+                              final a = report!["activities"][index];
 
-                        return Card(
-                          child: ListTile(
-                            title: Text(a["customerName"] ?? ""),
-                            subtitle: Text(a["status"] ?? ""),
-                            trailing: Text("${a["paidAmount"] ?? 0} ₪"),
+                              return Card(
+                                child: ListTile(
+                                  title: Text(a["customerName"] ?? ""),
+                                  subtitle: Text(a["status"] ?? ""),
+                                  trailing: Text("${a["paidAmount"] ?? 0} ₪"),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   )
                 ],
               ),

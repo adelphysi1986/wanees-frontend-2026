@@ -30,7 +30,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
   static const Color unavailable = Color(0xFF8C3D2A);
   String trainerName = '';
   bool isLoading = true;
-  int _selectedIndex = 0; // 0 = حسابي, 1 = جلساتي
+  int _selectedIndex = 0; // 0 = حسابي, 1 = جلساتي, 2 = تقاريري
   List<dynamic> _sessions = [];
   bool _isLoadingSessions = false;
   bool _isLoadingReport = false;
@@ -43,6 +43,15 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
 
   DateTime? fromDate;
   DateTime? toDate;
+
+  // ── تقرير "جلسات بكودي" ──
+  String _reportMode = 'mine'; // 'mine' أو 'byCode'
+  bool _isLoadingByCodeReport = false;
+  List<dynamic> _byCodeActivities = [];
+  double _byCodeTotalAmount = 0;
+  double _byCodePlatformShare = 0;
+  int _byCodeTotalCount = 0;
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -133,6 +142,61 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
     setState(() {
       _isLoadingReport = false;
     });
+  }
+
+  // ── تقرير "جلسات بكودي" ──
+  Future<void> _fetchReportByCode() async {
+    final token = await _getToken();
+    if (token == null) return;
+
+    setState(() {
+      _isLoadingByCodeReport = true;
+    });
+
+    String url = '$_baseUrl/api/trainers/report-by-code';
+
+    if (fromDate != null || toDate != null) {
+      url += '?';
+      if (fromDate != null) {
+        url += 'from=${fromDate!.toIso8601String()}';
+      }
+      if (toDate != null) {
+        if (fromDate != null) url += '&';
+        url += 'to=${toDate!.toIso8601String()}';
+      }
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        setState(() {
+          _byCodeActivities = data['activities'] ?? [];
+          _byCodeTotalAmount = (data['totalAmount'] ?? 0).toDouble();
+          _byCodePlatformShare = (data['platformShare'] ?? 0).toDouble();
+          _byCodeTotalCount = data['totalCount'] ?? 0;
+        });
+      }
+    } catch (e) {
+      print("BY CODE REPORT ERROR $e");
+    }
+
+    setState(() {
+      _isLoadingByCodeReport = false;
+    });
+  }
+
+  void _refreshCurrentReport() {
+    if (_reportMode == 'mine') {
+      _fetchReport();
+    } else {
+      _fetchReportByCode();
+    }
   }
 
   Future<void> _openZoom(String link) async {
@@ -448,6 +512,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
     );
   }
 
+  // ── محتوى تاب "تقاريري" ──
   Widget _buildReportContent() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(28),
@@ -459,6 +524,34 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
+
+          // ── القائمة المنسدلة لاختيار نوع التقرير ──
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: background,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: border),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: _reportMode,
+                icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                items: const [
+                  DropdownMenuItem(value: 'mine', child: Text('جلساتي')),
+                  DropdownMenuItem(value: 'byCode', child: Text('جلسات بكودي')),
+                ],
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() => _reportMode = value);
+                  _refreshCurrentReport();
+                },
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
           Row(
             children: [
               Expanded(
@@ -471,7 +564,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
                       initialDate: DateTime.now(),
                     );
 
-                    _fetchReport();
+                    _refreshCurrentReport();
                   },
                   child: Text(fromDate == null
                       ? "من تاريخ"
@@ -489,7 +582,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
                       initialDate: DateTime.now(),
                     );
 
-                    _fetchReport();
+                    _refreshCurrentReport();
                   },
                   child: Text(toDate == null
                       ? "إلى تاريخ"
@@ -499,55 +592,138 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
             ],
           ),
           const SizedBox(height: 30),
-          if (_isLoadingReport) const CircularProgressIndicator(),
-          Card(
-            child: ListTile(
-              title: const Text("عدد الجلسات"),
-              trailing: Text("$totalSessions"),
+
+          if (_reportMode == 'mine') ...[
+            if (_isLoadingReport) const CircularProgressIndicator(),
+            Card(
+              child: ListTile(
+                title: const Text("عدد الجلسات"),
+                trailing: Text("$totalSessions"),
+              ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("الجلسات المدفوعة"),
-              trailing: Text("$paidSessions"),
+            Card(
+              child: ListTile(
+                title: const Text("الجلسات المدفوعة"),
+                trailing: Text("$paidSessions"),
+              ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("الجلسات غير المدفوعة"),
-              trailing: Text("$unpaidSessions"),
+            Card(
+              child: ListTile(
+                title: const Text("الجلسات غير المدفوعة"),
+                trailing: Text("$unpaidSessions"),
+              ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("إجمالي الإيرادات"),
-              trailing: Text("$totalAmount ₪"),
+            Card(
+              child: ListTile(
+                title: const Text("إجمالي الإيرادات"),
+                trailing: Text("$totalAmount ₪"),
+              ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("صافي مستحقات المدرب"),
-              subtitle: const Text("80% من الإيرادات"),
-              trailing: Text(
-                "${trainerAmount.toStringAsFixed(2)} ₪",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+            Card(
+              child: ListTile(
+                title: const Text("صافي مستحقات المدرب"),
+                subtitle: const Text("80% من الإيرادات"),
+                trailing: Text(
+                  "${trainerAmount.toStringAsFixed(2)} ₪",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("مستحقات المنصة"),
-              subtitle: const Text("20% من الإيرادات"),
-              trailing: Text(
-                "${platformAmount.toStringAsFixed(2)} ₪",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+            Card(
+              child: ListTile(
+                title: const Text("مستحقات المنصة"),
+                subtitle: const Text("20% من الإيرادات"),
+                trailing: Text(
+                  "${platformAmount.toStringAsFixed(2)} ₪",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
+          ] else ...[
+            if (_isLoadingByCodeReport) const CircularProgressIndicator(),
+            Card(
+              child: ListTile(
+                title: const Text("عدد الجلسات"),
+                trailing: Text("$_byCodeTotalCount"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: const Text("إجمالي المبلغ"),
+                trailing: Text("$_byCodeTotalAmount ₪"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: const Text("نسبة المنصة"),
+                subtitle: const Text("20% من الإيرادات"),
+                trailing: Text(
+                  "${_byCodePlatformShare.toStringAsFixed(2)} ₪",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            if (!_isLoadingByCodeReport && _byCodeActivities.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text(
+                    'ما في جلسات بهذا الكود',
+                    style: TextStyle(color: textSecondary),
+                  ),
+                ),
+              )
+            else
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _byCodeActivities.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  final item = _byCodeActivities[index];
+                  return Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: border),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item['customerName'] ?? 'مستخدم غير معروف',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 14),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formatDateTime(item['sessionTime']?.toString()),
+                                style: const TextStyle(
+                                    fontSize: 12, color: textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "${item['paidAmount'] ?? 0} ₪",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w800, color: navy),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+          ],
         ],
       ),
     );
@@ -763,6 +939,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _balanceController,
+                        readOnly: true,
                         keyboardType: TextInputType.number,
                         decoration: _fieldDecoration(
                             '0', Icons.account_balance_wallet_outlined),
@@ -781,6 +958,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _paymentsCountController,
+                        readOnly: true,
                         keyboardType: TextInputType.number,
                         decoration:
                             _fieldDecoration('0', Icons.receipt_long_outlined),
@@ -797,6 +975,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _codeController,
+              readOnly: true,
               decoration: _fieldDecoration('كود المدرب', Icons.qr_code_rounded),
             ),
             const SizedBox(height: 24),
@@ -1020,33 +1199,12 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        //   InkWell(
-                        //   onTap: () {
-                        //    Clipboard.setData(
-                        ///     ClipboardData(
-                        //      text: zoomLink,
-                        //    ),
-                        //   );
-//
-                        //  ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(
-                        //        content: Text('تم نسخ رابط زوم'),
-                        //      ),
-                        //    );
-                        //  },
-                        //   child: const Icon(
-                        //        Icons.copy_rounded,
-                        //    size: 18,
-                        //     color: navy,
-                        //   ),
-                        //   ),
                       ],
                     ),
                   ),
                 ],
 
                 // ── أزرار التحكم: قبول / إلغاء / حذف ──
-                // موجودة دايماً (خارج شرط showZoom) وبتتغيّر حسب الحالة الحالية
                 const SizedBox(height: 14),
                 Row(
                   children: [

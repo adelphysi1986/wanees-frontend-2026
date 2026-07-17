@@ -326,11 +326,12 @@ class AccountScreenState extends State<AccountScreen> {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: _showEditCodeDialog,
-                  icon: const Icon(Icons.edit_rounded,
-                      color: Colors.white, size: 20),
-                ),
+                if (_code == '')
+                  IconButton(
+                    onPressed: _showEditCodeDialog,
+                    icon: const Icon(Icons.edit_rounded,
+                        color: Colors.white, size: 20),
+                  ),
               ],
             ),
           ),
