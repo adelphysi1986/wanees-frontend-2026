@@ -13,9 +13,8 @@ class TrainerLoginScreen extends StatefulWidget {
 }
 
 class _TrainerLoginScreenState extends State<TrainerLoginScreen> {
-  // تشغيل على الويب (Chrome) والباك اند شغال محلياً → http://localhost:5000
-  static const String _baseUrl =
-      'http://localhost:5000                                               ';
+  // تشغيل على الويب (Chrome) والباك اند شغال محلياً → https://wanees-backend-2026.onrender.com
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
   static const Color navy = Color(0xFF14213D);
   static const Color gold = Color(0xFFE3B23C);
   static const Color background = Color(0xFFF6F4EF);

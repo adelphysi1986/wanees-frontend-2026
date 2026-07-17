@@ -11,8 +11,7 @@ class AdminRegisterScreen extends StatefulWidget {
 }
 
 class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
-  static const String _baseUrl =
-      'http://localhost:5000                                               ';
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
 
   static const Color navy = Color(0xFF14213D);
   static const Color gold = Color(0xFFE3B23C);

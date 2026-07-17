@@ -15,7 +15,7 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  static const String _baseUrl = 'http://localhost:5000';
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
 
   static const Color navy = Color(0xFF14213D);
   static const Color navyDark = Color(0xFF0D1830);

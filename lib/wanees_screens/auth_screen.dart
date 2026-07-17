@@ -28,8 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
   // ══════════════════════════════════════════════════════════════
   // ⚠️ عدّل هذا الرابط ليطابق سيرفرك (نفس ملاحظة trainers_screen.dart)
   // ══════════════════════════════════════════════════════════════
-  static const String _baseUrl =
-      'http://localhost:5000                                               ';
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
   static const String _registerEndpoint = '$_baseUrl/api/users/register';
   static const String _loginEndpoint = '$_baseUrl/api/users/login';
   static const String _googleEndpoint = '$_baseUrl/api/users/google';

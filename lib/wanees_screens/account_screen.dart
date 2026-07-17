@@ -22,7 +22,7 @@ class AccountScreenState extends State<AccountScreen> {
   static const Color unavailable = Color(0xFF8C3D2A);
 
   static const String _baseUrl =
-      'http://localhost:5000'; // 👈 عدّلها لنفس مصدر باقي الشاشات
+      'https://wanees-backend-2026.onrender.com'; // 👈 عدّلها لنفس مصدر باقي الشاشات
 
   String _name = '';
   String _phone = '';

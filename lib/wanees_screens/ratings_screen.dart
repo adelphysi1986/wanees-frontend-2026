@@ -17,7 +17,8 @@ class _RatingsScreenState extends State<RatingsScreen> {
   static const Color textPrimary = Color(0xFF1A1A1A);
   static const Color textSecondary = Color(0xFF6B6B67);
 
-  final String _baseUrl = 'http://localhost:5000'; // 👈 عدّلها لنفس المصدر
+  final String _baseUrl =
+      'https://wanees-backend-2026.onrender.com'; // 👈 عدّلها لنفس المصدر
 
   final List<Map<String, dynamic>> _reviews = [];
   final ScrollController _scrollController = ScrollController();

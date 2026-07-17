@@ -12,12 +12,11 @@ class TrainerRegisterScreen extends StatefulWidget {
 }
 
 class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
-  // تشغيل على الويب (Chrome) والباك اند شغال محلياً → http://localhost:5000
+  // تشغيل على الويب (Chrome) والباك اند شغال محلياً → https://wanees-backend-2026.onrender.com
   // Android Emulator → http://10.0.2.2:5000
   // جهاز حقيقي بنفس الشبكة → http://192.168.x.x:5000 (آي بي جهاز الكمبيوتر)
   // Render بعد الرفع → https://your-backend.onrender.com
-  static const String _baseUrl =
-      'http://localhost:5000                                               ';
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
 
   static const Color navy = Color(0xFF14213D);
   static const Color gold = Color(0xFFE3B23C);

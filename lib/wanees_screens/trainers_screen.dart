@@ -32,10 +32,10 @@ class _TrainersScreenState extends State<TrainersScreen> {
   // ══════════════════════════════════════════════════════════════
   // ⚠️ عدّل هذا الرابط ليطابق سيرفرك:
   //  - إذا محاكي أندرويد (Android emulator) استخدم: http://10.0.2.2:5000
-  //  - إذا محاكي iOS أو Chrome/Web استخدم: http://localhost:5000
+  //  - إذا محاكي iOS أو Chrome/Web استخدم: https://wanees-backend-2026.onrender.com
   //  - إذا جهاز حقيقي أو سيرفر مرفوع (deployed) استخدم رابطه الحقيقي (https://...)
   // ══════════════════════════════════════════════════════════════
-  static const String _baseUrl = 'http://localhost:5000';
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
   static const String _trainersEndpoint = '$_baseUrl/api/trainers';
 
   List<Map<String, dynamic>> _trainers = [];

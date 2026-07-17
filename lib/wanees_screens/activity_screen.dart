@@ -17,8 +17,7 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class ActivityScreenState extends State<ActivityScreen> {
-  static const String _baseUrl =
-      'http://localhost:5000                                               ';
+  static const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
 
   static const Color navy = Color(0xFF14213D);
   static const Color background = Color(0xFFF6F4EF);

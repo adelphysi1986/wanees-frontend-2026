@@ -17,7 +17,8 @@ class PushNotificationService {
       'BCOCcMrvWOcPU2ccYoG_Fo89LKmn0bVReZLJU6Ch1YBBSf_aVg_76geRLrxXe0tlm5GYbPFax10T7aPbYGVbaH4';
 
   // ⚠️ استبدل هاد برابط الباك اند تبعك
-  static const String _apiBaseUrl = 'http://localhost:5000/api';
+  static const String _apiBaseUrl =
+      'https://wanees-backend-2026.onrender.com/api';
 
   String? _fcmToken;
   String? get fcmToken => _fcmToken;
@@ -47,7 +48,6 @@ class PushNotificationService {
     try {
       if (kIsWeb) {
         _fcmToken = await _messaging.getToken(vapidKey: _vapidKey);
-        
       } else {
         _fcmToken = await _messaging.getToken();
       }

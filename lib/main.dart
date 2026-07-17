@@ -22,7 +22,7 @@ import 'admin_screens/trainer_login_screen.dart';
 import 'wanees_screens/auth_screen.dart';
 import 'wanees_screens/home_shell.dart';
 
-const String _baseUrl = 'http://localhost:5000';
+const String _baseUrl = 'https://wanees-backend-2026.onrender.com';
 
 // هاي الدالة بتشتغل مرة وحدة فور ما التطبيق يفتح
 // بتشوف مين مسجل دخول (مدرب أو أدمن أو زبون) وبتبعت الرمز الحالي فوراً
