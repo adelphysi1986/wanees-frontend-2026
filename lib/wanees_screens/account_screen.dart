@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trainers_app/google_auth_service.dart';
 import 'package:trainers_app/wanees_screens/fav_screen.dart';
 import 'package:trainers_app/wanees_screens/mycompleted_activities.dart';
 
@@ -100,6 +101,8 @@ class AccountScreenState extends State<AccountScreen> {
     );
 
     if (confirmed != true) return;
+
+    await GoogleAuthService.instance.signOut();
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
