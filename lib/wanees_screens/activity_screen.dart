@@ -484,50 +484,53 @@ class ActivityScreenState extends State<ActivityScreen> {
                 border: Border.all(color: border),
               ),
               child: status == 'approved'
-                  ? Row(
-                      children: [
-                        const Icon(Icons.videocam_outlined,
-                            size: 15, color: zoomBlue),
-                        const SizedBox(width: 6),
-                        Expanded(
-                            child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 12,
-                              height: 12,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                                .animate(onPlay: (c) => c.repeat())
-                                .fade(begin: 0.2, end: 1, duration: 700.ms)
-                                .then()
-                                .fade(begin: 1, end: 0.2, duration: 700.ms),
-                            const SizedBox(width: 8),
-                            const Expanded(
-                              child: Text(
-                                'اضغط هنا للدخول إلى الاجتماع مع المدرب',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 14,
+                  ? InkWell(
+                      onTap: () async {
+                        final uri = Uri.parse(zoomLink);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri,
+                              mode: LaunchMode.externalApplication);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('تعذر فتح رابط زوم')),
+                          );
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(Icons.videocam_outlined,
+                              size: 15, color: zoomBlue),
+                          const SizedBox(width: 6),
+                          Expanded(
+                              child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 12,
+                                height: 12,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              )
+                                  .animate(onPlay: (c) => c.repeat())
+                                  .fade(begin: 0.2, end: 1, duration: 700.ms)
+                                  .then()
+                                  .fade(begin: 1, end: 0.2, duration: 700.ms),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  'اضغط هنا للدخول إلى الاجتماع مع المدرب',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )),
-                        //InkWell(
-                        //    onTap: () {
-                        //   Clipboard.setData(ClipboardData(text: zoomLink));
-                        //    ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(content: Text('تم نسخ رابط زوم')),
-                        //     );
-                        //     },
-                        //    child: const Icon(Icons.copy_rounded,
-                        //    size: 16, color: navy),
-                        //   ),
-                      ],
+                            ],
+                          )),
+                        ],
+                      ),
                     )
                   :
 
