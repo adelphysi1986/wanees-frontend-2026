@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:trainers_app/google_auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// شاشة تسجيل الدخول / إنشاء حساب — كل شي هون بملف واحد:
@@ -32,15 +32,6 @@ class _AuthScreenState extends State<AuthScreen> {
   static const String _registerEndpoint = '$_baseUrl/api/users/register';
   static const String _loginEndpoint = '$_baseUrl/api/users/login';
   static const String _googleEndpoint = '$_baseUrl/api/users/google';
-
-  // ⚠️ عدّل الـ clientId بعد ما تجهزه من Google Cloud Console (خطوات فوق)
-  static const String _googleWebClientId =
-      '159001548872-sr9rktlivt6g9ops83m5toh17k0lf11g.apps.googleusercontent.com';
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: _googleWebClientId,
-    scopes: ['email', 'profile'],
-  );
 
   bool _isLoginMode = true;
   bool _isLoading = false;
@@ -164,6 +155,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  // ── تسجيل الدخول عبر جوجل: بتستخدم النسخة المشتركة (Singleton) هلأ ──
   Future<void> _handleGoogleAuth() async {
     setState(() {
       _isLoading = true;
@@ -171,7 +163,7 @@ class _AuthScreenState extends State<AuthScreen> {
     });
 
     try {
-      final account = await _googleSignIn.signIn();
+      final account = await GoogleAuthService.instance.googleSignIn.signIn();
       if (account == null) {
         setState(() => _isLoading = false);
         return;
@@ -363,7 +355,9 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             validator: (v) {
               if (v == null || v.isEmpty) return 'الرجاء إدخال كلمة السر';
-              if (v.length < 6) return 'كلمة السر يجب أن تكون 6 أحرف على الأقل';
+              if (v.length < 6) {
+                return 'كلمة السر يجب أن تكون 6 أحرف على الأقل';
+              }
               return null;
             },
           ),
