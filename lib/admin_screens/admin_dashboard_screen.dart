@@ -76,6 +76,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   bool get _canEdit => _role == 'full' || _role == 'editor';
 
+  bool _isSidebarCollapsed = false;
   Widget _sidebarItem(
       {required IconData icon, required String label, required int index}) {
     final bool selected = _selectedIndex == index;
@@ -107,55 +108,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _comingSoon(String title, String subtitle) {
-    return Padding(
-      padding: const EdgeInsets.all(28),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: textPrimary)),
-          const SizedBox(height: 4),
-          Text(subtitle,
-              style: const TextStyle(fontSize: 13, color: textSecondary)),
-          const SizedBox(height: 40),
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  width: 84,
-                  height: 84,
-                  decoration: BoxDecoration(
-                      color: navy.withValues(alpha: 0.08),
-                      shape: BoxShape.circle),
-                  child: const Icon(Icons.construction_rounded,
-                      color: navy, size: 38),
-                ),
-                const SizedBox(height: 18),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: surface,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: border),
-                  ),
-                  child: const Text(
-                      'قيد التطوير — بحتاج موديل إضافي بالباك اند',
-                      style: TextStyle(
-                          fontSize: 12.5, fontWeight: FontWeight.w700)),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_isChecking) {
@@ -181,113 +133,175 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     return Scaffold(
       backgroundColor: background,
-      body: Row(
+      body: Column(
         children: [
+          // ── الشريط العلوي — فيه أيقونة الهمبرغر ──
           Container(
-            width: 230,
+            height: 56,
             color: navyDark,
             child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              bottom: false,
+              child: Row(
                 children: [
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 52,
-                          height: 52,
-                          decoration: BoxDecoration(
-                              color: gold.withValues(alpha: 0.2),
-                              shape: BoxShape.circle),
-                          child: const Icon(Icons.admin_panel_settings_rounded,
-                              color: gold, size: 26),
-                        ),
-                        const SizedBox(height: 12),
-                        const Text('لوحة تحكم الأدمن',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Text(
-                            _roleLabels[_role] ?? _role,
-                            style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
+                  InkWell(
+                    onTap: () => setState(
+                        () => _isSidebarCollapsed = !_isSidebarCollapsed),
+                    borderRadius: BorderRadius.circular(20),
+                    child: const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(Icons.menu_rounded,
+                          color: Colors.white, size: 22),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const Divider(color: Colors.white12, height: 1),
-                  const SizedBox(height: 12),
-                  _sidebarItem(
-                      icon: Icons.groups_outlined, label: 'المدربون', index: 0),
-                  _sidebarItem(
-                      icon: Icons.people_alt_outlined,
-                      label: 'المستخدمون',
-                      index: 1),
-                  _sidebarItem(
-                      icon: Icons.settings_outlined,
-                      label: 'الإعدادات',
-                      index: 2),
-                  _sidebarItem(
-                      icon: Icons.receipt_long_outlined,
-                      label: 'الطلبات',
-                      index: 3),
-                  _sidebarItem(
-                      icon: Icons.bar_chart_rounded,
-                      label: 'الإحصائيات',
-                      index: 4),
-                  if (_role == 'full')
-                    _sidebarItem(
-                        icon: Icons.admin_panel_settings_outlined,
-                        label: 'الأدمنز',
-                        index: 5),
-                  if (_role == 'full')
-                    _sidebarItem(icon: Icons.book, label: 'التقارير', index: 6),
-                  const Spacer(),
-                  const Divider(color: Colors.white12, height: 1),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: InkWell(
-                      onTap: _logout,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 13),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.logout_rounded,
-                                size: 20, color: Colors.white70),
-                            SizedBox(width: 12),
-                            Text('تسجيل الخروج',
-                                style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(width: 4),
+                  const Text('لوحة تحكم الأدمن',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
           ),
           Expanded(
-            child: SafeArea(child: sections[_selectedIndex]),
+            child: Row(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  width: _isSidebarCollapsed ? 0 : 230,
+                  color: navyDark,
+                  child: _isSidebarCollapsed
+                      ? null
+                      : ClipRect(
+                          child: SingleChildScrollView(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: MediaQuery.of(context).size.height -
+                                    56 -
+                                    MediaQuery.of(context).padding.top,
+                              ),
+                              child: IntrinsicHeight(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 52,
+                                            height: 52,
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    gold.withValues(alpha: 0.2),
+                                                shape: BoxShape.circle),
+                                            child: const Icon(
+                                                Icons
+                                                    .admin_panel_settings_rounded,
+                                                color: gold,
+                                                size: 26),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 4),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white
+                                                    .withValues(alpha: 0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Text(
+                                              _roleLabels[_role] ?? _role,
+                                              style: const TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 11.5,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    const Divider(
+                                        color: Colors.white12, height: 1),
+                                    const SizedBox(height: 12),
+                                    _sidebarItem(
+                                        icon: Icons.groups_outlined,
+                                        label: 'المدربون',
+                                        index: 0),
+                                    _sidebarItem(
+                                        icon: Icons.people_alt_outlined,
+                                        label: 'المستخدمون',
+                                        index: 1),
+                                    _sidebarItem(
+                                        icon: Icons.settings_outlined,
+                                        label: 'الإعدادات',
+                                        index: 2),
+                                    _sidebarItem(
+                                        icon: Icons.receipt_long_outlined,
+                                        label: 'الطلبات',
+                                        index: 3),
+                                    _sidebarItem(
+                                        icon: Icons.bar_chart_rounded,
+                                        label: 'الإحصائيات',
+                                        index: 4),
+                                    if (_role == 'full')
+                                      _sidebarItem(
+                                          icon: Icons
+                                              .admin_panel_settings_outlined,
+                                          label: 'الأدمنز',
+                                          index: 5),
+                                    if (_role == 'full')
+                                      _sidebarItem(
+                                          icon: Icons.book,
+                                          label: 'التقارير',
+                                          index: 6),
+                                    const Spacer(),
+                                    const Divider(
+                                        color: Colors.white12, height: 1),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: InkWell(
+                                        onTap: _logout,
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 14, vertical: 13),
+                                          child: const Row(
+                                            children: [
+                                              Icon(Icons.logout_rounded,
+                                                  size: 20,
+                                                  color: Colors.white70),
+                                              SizedBox(width: 12),
+                                              Text('تسجيل الخروج',
+                                                  style: TextStyle(
+                                                      color: Colors.white70,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
+                Expanded(
+                  child: SafeArea(top: false, child: sections[_selectedIndex]),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -438,8 +452,9 @@ class _ReportsSectionState extends State<_ReportsSection> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,7 +464,9 @@ class _ReportsSectionState extends State<_ReportsSection> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          Row(
+          Wrap(
+            spacing: 15,
+            runSpacing: 10,
             children: [
               ElevatedButton.icon(
                 icon: const Icon(Icons.date_range),
@@ -462,7 +479,6 @@ class _ReportsSectionState extends State<_ReportsSection> {
                   pickDate(true);
                 },
               ),
-              const SizedBox(width: 15),
               ElevatedButton.icon(
                 icon: const Icon(Icons.date_range),
                 label: Text(
@@ -477,7 +493,9 @@ class _ReportsSectionState extends State<_ReportsSection> {
             ],
           ),
           const SizedBox(height: 20),
-          Row(
+          Wrap(
+            spacing: 15,
+            runSpacing: 10,
             children: [
               ChoiceChip(
                 label: const Text("المدربون"),
@@ -493,7 +511,6 @@ class _ReportsSectionState extends State<_ReportsSection> {
                   loadPeople();
                 },
               ),
-              const SizedBox(width: 15),
               ChoiceChip(
                 label: const Text("المستخدمون"),
                 selected: type == "user",
@@ -511,25 +528,31 @@ class _ReportsSectionState extends State<_ReportsSection> {
             ],
           ),
           const SizedBox(height: 20),
-          DropdownButton<dynamic>(
-            hint: const Text("اختر الشخص"),
-            value: selectedPerson,
-            items: people.map((p) {
-              return DropdownMenuItem(
-                value: p,
-                child: Text(p["name"] ?? p["username"] ?? ""),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() => selectedPerson = value);
-              _refreshReport();
-            },
+          SizedBox(
+            width: double.infinity,
+            child: DropdownButton<dynamic>(
+              hint: const Text("اختر الشخص"),
+              value: selectedPerson,
+              isExpanded: true,
+              items: people.map((p) {
+                return DropdownMenuItem(
+                  value: p,
+                  child: Text(p["name"] ?? p["username"] ?? ""),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => selectedPerson = value);
+                _refreshReport();
+              },
+            ),
           ),
 
           // ── خيار "جلسات بالكود" — يظهر بس لما يكون النوع "مدرب" وفي شخص مختار ──
           if (type == "trainer" && selectedPerson != null) ...[
             const SizedBox(height: 16),
-            Row(
+            Wrap(
+              spacing: 15,
+              runSpacing: 10,
               children: [
                 ChoiceChip(
                   label: const Text("جلسات المدرب"),
@@ -539,7 +562,6 @@ class _ReportsSectionState extends State<_ReportsSection> {
                     _refreshReport();
                   },
                 ),
-                const SizedBox(width: 15),
                 ChoiceChip(
                   label: const Text("جلسات بالكود"),
                   selected: reportMode == "byCode",
@@ -553,51 +575,51 @@ class _ReportsSectionState extends State<_ReportsSection> {
           ],
 
           const SizedBox(height: 30),
-          if (isLoadingReport) const CircularProgressIndicator(),
-          if (report != null && !isLoadingReport)
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _card("عدد الجلسات", report!["totalCount"].toString()),
-                      if (reportMode == "entity")
-                        _card("المدفوع", report!["paidCount"].toString()),
-                      _card("الإيرادات", "${report!["totalAmount"]} ₪"),
-                      if (reportMode == "byCode")
-                        _card("نسبة المنصة (20%)",
-                            "${(report!["platformShare"] as num).toStringAsFixed(2)} ₪"),
-                    ],
-                  ),
-                  const SizedBox(height: 25),
-                  const Text(
-                    "العمليات المالية",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Expanded(
-                    child: report!["activities"].isEmpty
-                        ? const Center(
-                            child: Text("ما في جلسات مطابقة"),
-                          )
-                        : ListView.builder(
-                            itemCount: report!["activities"].length,
-                            itemBuilder: (context, index) {
-                              final a = report!["activities"][index];
-
-                              return Card(
-                                child: ListTile(
-                                  title: Text(a["customerName"] ?? ""),
-                                  subtitle: Text(a["status"] ?? ""),
-                                  trailing: Text("${a["paidAmount"] ?? 0} ₪"),
-                                ),
-                              );
-                            },
-                          ),
+          if (isLoadingReport) const Center(child: CircularProgressIndicator()),
+          if (report != null && !isLoadingReport) ...[
+            Wrap(
+              spacing: 15,
+              runSpacing: 10,
+              children: [
+                _card("عدد الجلسات", report!["totalCount"].toString()),
+                if (reportMode == "entity")
+                  _card("المدفوع", report!["paidCount"].toString()),
+                _card("الإيرادات", "${report!["totalAmount"]} ₪"),
+                if (reportMode == "byCode")
+                  _card("نسبة المنصة (20%)",
+                      "${(report!["platformShare"] as num).toStringAsFixed(2)} ₪"),
+              ],
+            ),
+            const SizedBox(height: 25),
+            const Text(
+              "العمليات المالية",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            report!["activities"].isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: Text("ما في جلسات مطابقة"),
+                    ),
                   )
-                ],
-              ),
-            )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: report!["activities"].length,
+                    itemBuilder: (context, index) {
+                      final a = report!["activities"][index];
+
+                      return Card(
+                        child: ListTile(
+                          title: Text(a["customerName"] ?? ""),
+                          subtitle: Text(a["status"] ?? ""),
+                          trailing: Text("${a["paidAmount"] ?? 0} ₪"),
+                        ),
+                      );
+                    },
+                  ),
+          ],
         ],
       ),
     );
@@ -606,7 +628,6 @@ class _ReportsSectionState extends State<_ReportsSection> {
   Widget _card(String title, String value) {
     return Container(
       width: 150,
-      margin: const EdgeInsets.only(right: 15),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,

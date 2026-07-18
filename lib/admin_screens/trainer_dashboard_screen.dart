@@ -68,6 +68,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
   bool _isUploadingImage = false;
   bool _isSavingProfile = false;
 
+  bool _isSidebarCollapsed = false;
   @override
   void initState() {
     super.initState();
@@ -1334,6 +1335,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Scaffold(
@@ -1344,108 +1346,171 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
 
     return Scaffold(
       backgroundColor: background,
-      body: Row(
+      body: Column(
         children: [
-          // ── السايد بار ──
+          // ── الشريط العلوي — فيه أيقونة الهمبرغر ──
           Container(
-            width: 220,
+            height: 56,
             color: navyDark,
             child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              bottom: false,
+              child: Row(
                 children: [
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 52,
-                          height: 52,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: gold.withValues(alpha: 0.2),
-                            image: _imageUrl.isNotEmpty
-                                ? DecorationImage(
-                                    image: NetworkImage(_imageUrl),
-                                    fit: BoxFit.cover)
-                                : null,
-                          ),
-                          child: _imageUrl.isEmpty
-                              ? const Icon(Icons.fitness_center_rounded,
-                                  color: gold, size: 24)
-                              : null,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          trainerName,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        const Text('مدرب',
-                            style:
-                                TextStyle(color: Colors.white54, fontSize: 12)),
-                      ],
+                  InkWell(
+                    onTap: () => setState(
+                        () => _isSidebarCollapsed = !_isSidebarCollapsed),
+                    borderRadius: BorderRadius.circular(20),
+                    child: const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(Icons.menu_rounded,
+                          color: Colors.white, size: 22),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const Divider(color: Colors.white12, height: 1),
-                  const SizedBox(height: 12),
-                  _sidebarItem(
-                      icon: Icons.person_outline_rounded,
-                      label: 'حسابي',
-                      index: 0),
-                  _sidebarItem(
-                      icon: Icons.event_note_outlined,
-                      label: 'جلساتي',
-                      index: 1),
-                  _sidebarItem(
-                    icon: Icons.bar_chart,
-                    label: 'تقاريري',
-                    index: 2,
-                  ),
-                  const Spacer(),
-                  const Divider(color: Colors.white12, height: 1),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: InkWell(
-                      onTap: logout,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 13),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.logout_rounded,
-                                size: 20, color: Colors.white70),
-                            SizedBox(width: 12),
-                            Text('تسجيل الخروج',
-                                style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(width: 4),
+                  Text(trainerName,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
           ),
           Expanded(
-            child: SafeArea(
-              child: _selectedIndex == 0
-                  ? _buildAccountContent()
-                  : _selectedIndex == 1
-                      ? _buildSessionsContent()
-                      : _buildReportContent(),
+            child: Row(
+              children: [
+                // ── السايد بار ──
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  width: _isSidebarCollapsed ? 0 : 220,
+                  color: navyDark,
+                  child: _isSidebarCollapsed
+                      ? null
+                      : ClipRect(
+                          child: SingleChildScrollView(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: MediaQuery.of(context).size.height -
+                                    56 -
+                                    MediaQuery.of(context).padding.top,
+                              ),
+                              child: IntrinsicHeight(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 52,
+                                            height: 52,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color:
+                                                  gold.withValues(alpha: 0.2),
+                                              image: _imageUrl.isNotEmpty
+                                                  ? DecorationImage(
+                                                      image: NetworkImage(
+                                                          _imageUrl),
+                                                      fit: BoxFit.cover)
+                                                  : null,
+                                            ),
+                                            child: _imageUrl.isEmpty
+                                                ? const Icon(
+                                                    Icons
+                                                        .fitness_center_rounded,
+                                                    color: gold,
+                                                    size: 24)
+                                                : null,
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            trainerName,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w800),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          const Text('مدرب',
+                                              style: TextStyle(
+                                                  color: Colors.white54,
+                                                  fontSize: 12)),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    const Divider(
+                                        color: Colors.white12, height: 1),
+                                    const SizedBox(height: 12),
+                                    _sidebarItem(
+                                        icon: Icons.person_outline_rounded,
+                                        label: 'حسابي',
+                                        index: 0),
+                                    _sidebarItem(
+                                        icon: Icons.event_note_outlined,
+                                        label: 'جلساتي',
+                                        index: 1),
+                                    _sidebarItem(
+                                      icon: Icons.bar_chart,
+                                      label: 'تقاريري',
+                                      index: 2,
+                                    ),
+                                    const Spacer(),
+                                    const Divider(
+                                        color: Colors.white12, height: 1),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: InkWell(
+                                        onTap: logout,
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 14, vertical: 13),
+                                          child: const Row(
+                                            children: [
+                                              Icon(Icons.logout_rounded,
+                                                  size: 20,
+                                                  color: Colors.white70),
+                                              SizedBox(width: 12),
+                                              Text('تسجيل الخروج',
+                                                  style: TextStyle(
+                                                      color: Colors.white70,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
+                Expanded(
+                  child: SafeArea(
+                    top: false,
+                    child: _selectedIndex == 0
+                        ? _buildAccountContent()
+                        : _selectedIndex == 1
+                            ? _buildSessionsContent()
+                            : _buildReportContent(),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
