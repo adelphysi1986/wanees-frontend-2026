@@ -948,7 +948,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Image.network(
-                        'https://ui-avatars.com/api/?name=Trainers&background=14213D&color=E3B23C&size=160&bold=true&font-size=0.38',
+                        'https://res.cloudinary.com/dg7ylyz6l/image/upload/v1784410598/087e8259-8131-44a9-8230-e65abb4c25fd_tnyyfz.jpg',
                         width: 56,
                         height: 56,
                         fit: BoxFit.cover,
