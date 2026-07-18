@@ -254,7 +254,7 @@ class _RatingsScreenState extends State<RatingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('تقييمات الزبائن',
+                    Text('تقييمات المستخدمين',
                         style: Theme.of(context).textTheme.headlineSmall),
                     const SizedBox(height: 10),
                     Container(
@@ -287,7 +287,7 @@ class _RatingsScreenState extends State<RatingsScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                    'بناءً على ${_reviews.length} تقييم من الزبائن',
+                                    'بناءً على ${_reviews.length} تقييم من المستخدمين',
                                     style: const TextStyle(
                                         color: Colors.white70, fontSize: 12.5)),
                               ],

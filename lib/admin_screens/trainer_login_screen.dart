@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// شاشة تسجيل دخول المدرب — منفصلة تماماً عن شاشة دخول الأدمن
+/// شاشة تسجيل دخول المرشد — منفصلة تماماً عن شاشة دخول الأدمن
 class TrainerLoginScreen extends StatefulWidget {
   const TrainerLoginScreen({super.key});
 
@@ -152,7 +152,7 @@ class _TrainerLoginScreenState extends State<TrainerLoginScreen> {
                     color: navy, size: 28),
               ),
               const SizedBox(height: 20),
-              const Text('دخول المدرب',
+              const Text('دخول المرشد',
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,

@@ -410,14 +410,20 @@ class _AuthScreenState extends State<AuthScreen> {
                   children: [
                     Center(
                       child: Container(
-                        width: 60,
-                        height: 60,
+                        width: 120,
+                        height: 120,
                         decoration: BoxDecoration(
-                          color: navy,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Icon(Icons.fitness_center_rounded,
-                            color: gold, size: 30),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            'https://res.cloudinary.com/dg7ylyz6l/image/upload/v1784410598/087e8259-8131-44a9-8230-e65abb4c25fd_tnyyfz.jpg',
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 18),

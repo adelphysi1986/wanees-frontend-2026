@@ -7,8 +7,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-/// شاشة "النشاط" — تعرض حجوزات وجلسات الزبون المسجل دخول فقط.
-/// إذا الزبون مو مسجل دخول، بتعرض بدل النشاط دعوة لتسجيل الدخول.
+/// شاشة "النشاط" — تعرض حجوزات وجلسات المستخدم المسجل دخول فقط.
+/// إذا المستخدم مو مسجل دخول، بتعرض بدل النشاط دعوة لتسجيل الدخول.
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
 
@@ -252,7 +252,7 @@ class ActivityScreenState extends State<ActivityScreen> {
 
   String _actionByLabel(String? actionBy) {
     if (actionBy == 'admin') return 'الأدمن';
-    if (actionBy == 'trainer') return 'المدرب';
+    if (actionBy == 'trainer') return 'المرشد';
     return '';
   }
 
@@ -401,7 +401,7 @@ class ActivityScreenState extends State<ActivityScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'مع المدرب ${item['trainerName'] ?? ''}',
+                      'مع المرشد ${item['trainerName'] ?? ''}',
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 14.5,
@@ -520,7 +520,7 @@ class ActivityScreenState extends State<ActivityScreen> {
                               const SizedBox(width: 8),
                               const Expanded(
                                 child: Text(
-                                  'اضغط هنا للدخول إلى الاجتماع مع المدرب',
+                                  'اضغط هنا للدخول إلى الاجتماع مع المرشد',
                                   style: TextStyle(
                                     color: Colors.blue,
                                     fontSize: 14,

@@ -178,7 +178,7 @@ class _FavoriteTrainersScreenState extends State<FavoriteTrainersScreen> {
     }
   }
 
-  // ── ديالوج تفاصيل المدرب + زر حجز مباشر ──
+  // ── ديالوج تفاصيل المرشد + زر حجز مباشر ──
   void _openTrainerDialog(Map<String, dynamic> trainer) {
     final bool available = trainer['available'] == true;
     final bool busy = trainer['busy'] == true;
@@ -258,7 +258,7 @@ class _FavoriteTrainersScreenState extends State<FavoriteTrainersScreen> {
                           const SizedBox(height: 16),
                           const Divider(color: border),
                           const SizedBox(height: 12),
-                          const Text('نبذة عن المدرب',
+                          const Text('نبذة عن المرشد',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 14)),
                           const SizedBox(height: 6),
@@ -289,7 +289,7 @@ class _FavoriteTrainersScreenState extends State<FavoriteTrainersScreen> {
                         borderRadius: BorderRadius.circular(14)),
                   ),
                   child:
-                      Text(available ? 'احجز الآن' : 'المدرب غير متاح حالياً'),
+                      Text(available ? 'احجز الآن' : 'المرشد غير متاح حالياً'),
                 ),
               ),
             ],
@@ -323,7 +323,7 @@ class _FavoriteTrainersScreenState extends State<FavoriteTrainersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('المدربون المفضلون')),
+      appBar: AppBar(title: const Text('المرشدون المفضلون')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: navy))
           : _errorMessage != null

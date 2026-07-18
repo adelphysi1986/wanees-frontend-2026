@@ -225,7 +225,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                     child: InkWell(
                       onTap: () => _openZoom(zoomLink),
                       child: const Text(
-                        'اضغط للدخول إلى الاجتماع مع المدرب',
+                        'اضغط للدخول إلى الاجتماع مع المرشد',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,

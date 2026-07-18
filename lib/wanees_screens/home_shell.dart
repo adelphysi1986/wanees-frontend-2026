@@ -85,7 +85,7 @@ class _HomeShellState extends State<HomeShell> {
     {
       'icon': Icons.groups_outlined,
       'active': Icons.groups_rounded,
-      'label': 'المدربون'
+      'label': 'المرشدون'
     },
     {
       'icon': Icons.timeline_outlined,
@@ -133,6 +133,17 @@ class _HomeShellState extends State<HomeShell> {
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.network(
+                        'https://res.cloudinary.com/dg7ylyz6l/image/upload/v1784413384/wanees_ixjzw6.jpg',
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// شاشة تسجيل دخول الأدمن — منفصلة تماماً عن شاشة دخول المدرب
+/// شاشة تسجيل دخول الأدمن — منفصلة تماماً عن شاشة دخول المرشد
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
 
@@ -147,7 +147,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       fontWeight: FontWeight.w800,
                       color: textPrimary)),
               const SizedBox(height: 6),
-              const Text('سجّل دخولك لإدارة المنصة والمدربين والزبائن',
+              const Text('سجّل دخولك لإدارة المنصة والمرشدين والمستخدمين',
                   style: TextStyle(fontSize: 13, color: textSecondary)),
               const SizedBox(height: 32),
               const Text('البريد الإلكتروني',

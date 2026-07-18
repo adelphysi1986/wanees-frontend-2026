@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'activity_screen.dart';
 
-/// شاشة المدربين — كل شي هون: الألوان، جلب الداتا من الباك اند، القائمة، السجل، ومربع التفاصيل
+/// شاشة المرشدين — كل شي هون: الألوان، جلب الداتا من الباك اند، القائمة، السجل، ومربع التفاصيل
 class TrainersScreen extends StatefulWidget {
   final VoidCallback? onNavigateToActivity;
   const TrainersScreen(
@@ -61,7 +61,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
     }
   }
 
-  // ── جلب المدربين من الباك اند (GET /api/trainers) ──
+  // ── جلب المرشدين من الباك اند (GET /api/trainers) ──
   Future<void> _fetchTrainers() async {
     setState(() {
       _isLoading = true;
@@ -91,7 +91,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
         });
       } else {
         setState(() {
-          _errorMessage = 'فشل تحميل المدربين (كود ${response.statusCode})';
+          _errorMessage = 'فشل تحميل المرشدين (كود ${response.statusCode})';
           _isLoading = false;
         });
       }
@@ -103,7 +103,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
     }
   }
 
-// 👇 دالة جديدة: تجيب قائمة IDs المدربين المفضلين عند الزبون الحالي
+// 👇 دالة جديدة: تجيب قائمة IDs المرشدين المفضلين عند المستخدم الحالي
   Future<Set<String>> _fetchFavoriteIds() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
@@ -262,7 +262,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
                       ],
                     ),
                     const SizedBox(height: 18),
-                    const Text('اختر المدرب',
+                    const Text('اختر المرشد',
                         style: TextStyle(
                             fontSize: 13, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 8),
@@ -304,7 +304,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
                       controller: notesController,
                       maxLines: 4,
                       decoration: InputDecoration(
-                        hintText: 'اكتب أي تفاصيل حابب تشاركها مع المدرب...',
+                        hintText: 'اكتب أي تفاصيل حابب تشاركها مع المرشد...',
                         filled: true,
                         fillColor: background,
                         contentPadding: const EdgeInsets.all(12),
@@ -376,7 +376,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
               ),
               SizedBox(height: 18),
               Text(
-                'جاري توصيلك بالونيس',
+                'جاري توصيلك بالمرشد',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
@@ -612,7 +612,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
                             const SizedBox(height: 18),
                             const Divider(color: border),
                             const SizedBox(height: 14),
-                            Text('نبذة عن المدرب',
+                            Text('نبذة عن المرشد',
                                 style: textTheme.titleMedium
                                     ?.copyWith(fontSize: 14.5)),
                             const SizedBox(height: 8),
@@ -640,7 +640,7 @@ class _TrainersScreenState extends State<TrainersScreen> {
                       child: OutlinedButton.icon(
                         onPressed: () => _showRatingDialog(context, trainer),
                         icon: const Icon(Icons.star_border_rounded, size: 20),
-                        label: const Text('قيّم المدرب'),
+                        label: const Text('قيّم المرشد'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: gold,
                           side: const BorderSide(color: gold, width: 1.3),
@@ -909,20 +909,20 @@ class _TrainersScreenState extends State<TrainersScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('المدربون',
+                      Text('المرشدون',
                           style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
                               color: textPrimary)),
                       SizedBox(height: 4),
-                      Text('اختر مدربك وابدأ جلستك الأولى اليوم',
+                      Text('اختر ونيس وابدأ جلستك الأولى اليوم',
                           style: TextStyle(fontSize: 13, color: textSecondary)),
                     ],
                   ),
                 ),
                 const SizedBox(width: 14),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () async {
@@ -934,26 +934,17 @@ class _TrainersScreenState extends State<TrainersScreen> {
                         backgroundColor: navy,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 10),
+                            horizontal: 19, vertical: 14),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         textStyle: const TextStyle(
-                            fontSize: 12.5, fontWeight: FontWeight.w700),
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       child: const Text('احجز الآن'),
                     ),
                     const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        'https://res.cloudinary.com/dg7ylyz6l/image/upload/v1784410598/087e8259-8131-44a9-8230-e65abb4c25fd_tnyyfz.jpg',
-                        width: 56,
-                        height: 56,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -1410,7 +1401,7 @@ class _TrainerReviewsSheetState extends State<_TrainerReviewsSheet> {
                     : _reviews.isEmpty
                         ? const Padding(
                             padding: EdgeInsets.all(24),
-                            child: Text('لا توجد تقييمات بعد لهذا المدرب'),
+                            child: Text('لا توجد تقييمات بعد لهذا المرشد'),
                           )
                         : ListView.builder(
                             controller: _scrollController,

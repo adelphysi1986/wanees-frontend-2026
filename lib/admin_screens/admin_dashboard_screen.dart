@@ -233,7 +233,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                     const SizedBox(height: 12),
                                     _sidebarItem(
                                         icon: Icons.groups_outlined,
-                                        label: 'المدربون',
+                                        label: 'المرشدون',
                                         index: 0),
                                     _sidebarItem(
                                         icon: Icons.people_alt_outlined,
@@ -498,7 +498,7 @@ class _ReportsSectionState extends State<_ReportsSection> {
             runSpacing: 10,
             children: [
               ChoiceChip(
-                label: const Text("المدربون"),
+                label: const Text("المرشدون"),
                 selected: type == "trainer",
                 onSelected: (v) {
                   setState(() {
@@ -555,7 +555,7 @@ class _ReportsSectionState extends State<_ReportsSection> {
               runSpacing: 10,
               children: [
                 ChoiceChip(
-                  label: const Text("جلسات المدرب"),
+                  label: const Text("جلسات المرشد"),
                   selected: reportMode == "entity",
                   onSelected: (v) {
                     setState(() => reportMode = "entity");
@@ -648,7 +648,7 @@ class _ReportsSectionState extends State<_ReportsSection> {
 }
 
 // ═══════════════════════════════════════════
-// قسم "المدربون" — قائمة + بحث حي + تعديل أي مدرب
+// قسم "المرشدون" — قائمة + بحث حي + تعديل أي مدرب
 // ═══════════════════════════════════════════
 class _TrainersSection extends StatefulWidget {
   final String baseUrl;
@@ -758,13 +758,13 @@ class _TrainersSectionState extends State<_TrainersSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('المدربون',
+          const Text('المرشدون',
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   color: textPrimary)),
           const SizedBox(height: 4),
-          const Text('عرض وتعديل بيانات كل المدربين',
+          const Text('عرض وتعديل بيانات كل المرشدين',
               style: TextStyle(fontSize: 13, color: textSecondary)),
           const SizedBox(height: 20),
           TextField(
@@ -1106,7 +1106,7 @@ class _TrainerEditDialogState extends State<_TrainerEditDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('تعديل بيانات المدرب',
+                const Text('تعديل بيانات المرشد',
                     style:
                         TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
                 InkWell(
@@ -1696,7 +1696,7 @@ class _UserEditDialogState extends State<_UserEditDialog> {
   late TextEditingController _balance;
   late TextEditingController _sessionsCount;
 
-  // المدربون المفضلون: قائمة {'_id': ..., 'name': ...}
+  // المرشدون المفضلون: قائمة {'_id': ..., 'name': ...}
   List<Map<String, dynamic>> _favoriteTrainers = [];
   List<dynamic> _allTrainers = [];
   bool _isLoadingTrainers = true;
@@ -1804,7 +1804,7 @@ class _UserEditDialogState extends State<_UserEditDialog> {
                       controller: searchCtrl,
                       onChanged: (_) => setSheetState(() {}),
                       decoration: InputDecoration(
-                        hintText: 'ابحث باسم المدرب...',
+                        hintText: 'ابحث باسم المرشد...',
                         prefixIcon: const Icon(Icons.search_rounded, size: 20),
                         filled: true,
                         fillColor: background,
@@ -2086,7 +2086,7 @@ class _UserEditDialogState extends State<_UserEditDialog> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('المدربون المفضلون',
+                        const Text('المرشدون المفضلون',
                             style: TextStyle(
                                 fontSize: 13, fontWeight: FontWeight.w700)),
                         if (!readOnly)
@@ -2842,12 +2842,12 @@ class _StatsSectionState extends State<_StatsSection> {
                   fontWeight: FontWeight.w800,
                   color: textPrimary)),
           const SizedBox(height: 4),
-          const Text('نظرة عامة على المدربين والمدفوعات',
+          const Text('نظرة عامة على المرشدين والمدفوعات',
               style: TextStyle(fontSize: 13, color: textSecondary)),
           const SizedBox(height: 24),
           Row(
             children: [
-              _statCard('إجمالي المدربين', '${_stats!['totalTrainers']}',
+              _statCard('إجمالي المرشدين', '${_stats!['totalTrainers']}',
                   Icons.groups_outlined, navy),
               const SizedBox(width: 14),
               _statCard('متاحون الآن', '${_stats!['availableTrainers']}',
@@ -2875,7 +2875,7 @@ class _StatsSectionState extends State<_StatsSection> {
 }
 
 // ═══════════════════════════════════════════
-// قسم "الطلبات" — كل طلبات الحجز + فلترة بالاسم/المدرب + قبول/إلغاء/حذف
+// قسم "الطلبات" — كل طلبات الحجز + فلترة بالاسم/المرشد + قبول/إلغاء/حذف
 // ═══════════════════════════════════════════
 //
 // ملاحظة: هاد الجزء يفترض إن الباك اند فيه هالـ Endpoints (عدّل الأسماء إذا
@@ -3192,7 +3192,7 @@ class _RequestsSectionState extends State<_RequestsSection> {
                   fontWeight: FontWeight.w800,
                   color: textPrimary)),
           const SizedBox(height: 4),
-          const Text('كل طلبات الحجز — فلترة بالمستخدم أو المدرب أو كليهما',
+          const Text('كل طلبات الحجز — فلترة بالمستخدم أو المرشد أو كليهما',
               style: TextStyle(fontSize: 13, color: textSecondary)),
           const SizedBox(height: 18),
 
@@ -3205,7 +3205,7 @@ class _RequestsSectionState extends State<_RequestsSection> {
                   _searchController, 'بحث عام...', Icons.search_rounded),
               _filterField(_userFilterController, 'اسم المستخدم...',
                   Icons.person_outline_rounded),
-              _filterField(_trainerFilterController, 'اسم المدرب...',
+              _filterField(_trainerFilterController, 'اسم المرشد...',
                   Icons.sports_gymnastics_outlined),
             ],
           ),
@@ -3512,7 +3512,7 @@ class _RequestsSectionState extends State<_RequestsSection> {
                                   Text(
                                     actionBy == 'admin'
                                         ? '${status == 'rejected' ? 'رُفض' : 'أُلغي'} من قبل الأدمن'
-                                        : '${status == 'rejected' ? 'رُفض' : 'أُلغي'} من قبل المدرب',
+                                        : '${status == 'rejected' ? 'رُفض' : 'أُلغي'} من قبل المرشد',
                                     style: const TextStyle(
                                         fontSize: 11.5,
                                         color: textSecondary,

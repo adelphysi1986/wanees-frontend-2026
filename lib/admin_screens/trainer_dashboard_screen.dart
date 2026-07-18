@@ -622,7 +622,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
             ),
             Card(
               child: ListTile(
-                title: const Text("صافي مستحقات المدرب"),
+                title: const Text("صافي مستحقات المرشد"),
                 subtitle: const Text("80% من الإيرادات"),
                 trailing: Text(
                   "${trainerAmount.toStringAsFixed(2)} ₪",
@@ -977,7 +977,7 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
             TextFormField(
               controller: _codeController,
               readOnly: true,
-              decoration: _fieldDecoration('كود المدرب', Icons.qr_code_rounded),
+              decoration: _fieldDecoration('كود المرشد', Icons.qr_code_rounded),
             ),
             const SizedBox(height: 24),
 
