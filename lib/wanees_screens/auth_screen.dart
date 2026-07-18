@@ -35,7 +35,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   // ⚠️ عدّل الـ clientId بعد ما تجهزه من Google Cloud Console (خطوات فوق)
   static const String _googleWebClientId =
-      '462690385850-kpfvovc8bn73ljtu0qe2lmhpbdknscpj.apps.googleusercontent.com';
+      '159001548872-sr9rktlivt6g9ops83m5toh17k0lf11g.apps.googleusercontent.com';
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: _googleWebClientId,
