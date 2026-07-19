@@ -41,7 +41,8 @@ class ContactScreen extends StatelessWidget {
             Container(
               width: 42,
               height: 42,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
               child: Icon(icon, color: color, size: 20),
             ),
             const SizedBox(width: 12),
@@ -49,9 +50,13 @@ class ContactScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                  Text(title,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 14)),
                   const SizedBox(height: 2),
-                  Text(subtitle, style: const TextStyle(fontSize: 12.5, color: textSecondary)),
+                  Text(subtitle,
+                      style: const TextStyle(
+                          fontSize: 12.5, color: textSecondary)),
                 ],
               ),
             ),
@@ -70,28 +75,29 @@ class ContactScreen extends StatelessWidget {
         children: [
           Text('اتصل بنا', style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 4),
-          const Text('إلنا أي استفسار أو ملاحظة، فريقنا جاهز يساعدك', style: TextStyle(fontSize: 13, color: textSecondary)),
+          const Text('إلنا أي استفسار أو ملاحظة، فريقنا جاهز يساعدك',
+              style: TextStyle(fontSize: 13, color: textSecondary)),
           const SizedBox(height: 22),
           _contactCard(
             icon: Icons.call_outlined,
             title: 'اتصل فينا',
-            subtitle: '+970 59 000 0000',
+            subtitle: '+972 59 9071301',
             color: navy,
-            onTap: () => _launch('tel:+970590000000'),
+            onTap: () => _launch('tel:+972599071301'),
           ),
           _contactCard(
             icon: Icons.chat_outlined,
             title: 'واتساب',
             subtitle: 'راسلنا مباشرة على واتساب',
             color: const Color(0xFF2FA557),
-            onTap: () => _launch('https://wa.me/970590000000'),
+            onTap: () => _launch('https://wa.me/972599071301'),
           ),
           _contactCard(
             icon: Icons.mail_outline_rounded,
             title: 'البريد الإلكتروني',
-            subtitle: 'support@platform.com',
+            subtitle: 'Eshtreeli@gmail.com',
             color: const Color(0xFF2D6CDF),
-            onTap: () => _launch('mailto:support@platform.com'),
+            onTap: () => _launch('mailto:Eshtreeli@gmail.com'),
           ),
           _contactCard(
             icon: Icons.location_on_outlined,
@@ -101,7 +107,8 @@ class ContactScreen extends StatelessWidget {
             onTap: () {},
           ),
           const SizedBox(height: 24),
-          const Text('تابعنا', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+          const Text('تابعنا',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -116,12 +123,14 @@ class ContactScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: border),
                   ),
-                  child: const Icon(Icons.camera_alt_outlined, color: navy, size: 20),
+                  child: const Icon(Icons.camera_alt_outlined,
+                      color: navy, size: 20),
                 ),
               ),
               const SizedBox(width: 10),
               InkWell(
-                onTap: () => _launch('https://facebook.com'),
+                onTap: () => _launch(
+                    'https://www.facebook.com/profile.php?id=61591741247711'),
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   width: 48,
@@ -131,7 +140,8 @@ class ContactScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: border),
                   ),
-                  child: const Icon(Icons.facebook_outlined, color: navy, size: 20),
+                  child: const Icon(Icons.facebook_outlined,
+                      color: navy, size: 20),
                 ),
               ),
               const SizedBox(width: 10),
@@ -146,7 +156,8 @@ class ContactScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: border),
                   ),
-                  child: const Icon(Icons.play_circle_outline_rounded, color: navy, size: 20),
+                  child: const Icon(Icons.play_circle_outline_rounded,
+                      color: navy, size: 20),
                 ),
               ),
             ],
