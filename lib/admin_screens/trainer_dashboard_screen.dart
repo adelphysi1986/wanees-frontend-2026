@@ -1187,10 +1187,10 @@ class _TrainerDashboardScreenState extends State<TrainerDashboardScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () => _openZoom(zoomLink),
-                            child: Text(
+                            child: const Text(
                               'اضغط للدخول الى الاجتماع مع طالب الخدمة',
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 color: Color.fromARGB(255, 60, 98, 181),
                                 decoration: TextDecoration.underline,
