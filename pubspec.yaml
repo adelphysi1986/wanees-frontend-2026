@@ -42,16 +42,16 @@ flutter:
 flutter_icons:
   android: true
   ios: true
-  image_path: "web/favicon.png"
+  image_path: "web/icons/Icon-512.png"
   web:
     generate: true
-    image_path: "web/favicon.png"
+    image_path: "web/icons/Icon-512.png"
     background_color: "#ffffff"
     theme_color: "#ffffff"
 
 flutter_native_splash:
   color: "#ffffff"
-  image: web/favicon.png
+  image: web/icons/Icon-512.png
   android: true
   ios: true
   web: true
